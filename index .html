@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Form Invoice</title>
+    <style>
+  
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+     
+            background-image: url("bbbbb.jpg");
+            background-repeat: no-repeat;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .invoice-container {
+            
+            width: 100%;
+            max-width: 1200px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .header-details div {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .header-details h2 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #ecf0f1;
+        }
+        
+        .header-details p {
+            font-size: 1.1rem;
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .details-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-box {
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .detail-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-group input.error, .form-group textarea.error {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .items-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .items-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .items-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .items-table input.error {
+            border-color: #e74c3c;
+        }
+      
+        
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .add-item-btn {
+          
+            color:red;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        
+       
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            margin: 30px 0 10px;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+        
+        .delete-item-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .delete-item-btn:hover {
+            background: #c0392b;
+        }
+        
+      
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #27ae60;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: #e74c3c;
+        }
+        
+        .saved-invoices {
+            margin-top: 30px;
+            padding: 20px;
+            
+            border-radius: 8px;
+        }
+        
+        .saved-invoices h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .invoice-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-item:last-child {
+            border-bottom: none;
+        }
+        
+        .invoice-actions button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        .invoice-actions button.load-btn {
+            background: #27ae60;
+        }
+        
+        .invoice-actions button.delete-btn {
+            background: #e74c3c;
+        }
+       a {
+    border: 2px solid black;
+    padding: 25px;
+    background: darkturquoise;
+    border-radius: 59px;
+    color: blue;
+}
+       
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <h1>SHOPPING FORM INVOICE</h1>
+            <div class="header-details">
+                <div>
+                    <h2>ORDER NUMBER</h2>
+                    <p>#INV-<span id="order-number">2023-001</span></p>
+                </div>
+                <div>
+                    <h2>DATE</h2>
+                    <p id="current-date">November 10, 2023</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="details-section">
+                <div class="detail-box">
+                    <h3>Customer Details</h3>
+                    <div class="form-group">
+                        <label for="company-name">Business Name *</label>
+                        <input type="text" id="company-name" value="Shop Name" required>
+                        <div class="error-message" id="company-name-error">Business name is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-address">Address *</label>
+                        <textarea id="company-address" rows="2" required>DEWAS INDIA</textarea>
+                        <div class="error-message" id="company-address-error">Address is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-phone">Phone *</label>
+                        <input type="text" id="company-phone" value="+91 97XXX XXXXX" required>
+                        <div class="error-message" id="company-phone-error">Valid phone number is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-email">Email *</label>
+                        <input type="email" id="company-email" value="info@sunbhaishop.com" required>
+                        <div class="error-message" id="company-email-error">Valid email is required</div>
+                    </div>
+                </div>
+                
+                <div class="detail-box">
+                    <h3>Shipping Details</h3>
+                    <div class="form-group">
+                        <label for="client-name">Customer Name *</label>
+                        <input type="text" id="client-name" placeholder="Enter customer name" required>
+                        <div class="error-message" id="client-name-error">Customer name is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-address">Customer Address *</label>
+                        <textarea id="client-address" rows="2" placeholder="Enter customer address" required></textarea>
+                        <div class="error-message" id="client-address-error">Customer address is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-date">Invoice Date *</label>
+                        <input type="date" id="invoice-date" required>
+                        <div class="error-message" id="invoice-date-error">Invoice date is required</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Items</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="40%">Description *</th>
+                        <th width="15%">Quantity *</th>
+                        <th width="15%">Rate (₹) *</th>
+                        <th width="15%">Amount (₹)</th>
+                        <th width="10%"></th>
+                    </tr>
+                </thead>
+                <tbody id="items-tbody">
+                    
+                </tbody>
+            </table>
+            
+            <button class="add-item-btn" id="add-item-btn">+ Add Item</button>
+            
+            <button class="submit-btn" id="submit-btn"> Submit</button>
+            <a href="http://127.0.0.1:5500/index.html">print</a>
+            <div class="saved-invoices">
+              
+                <div id="invoice-list" class="invoice-list">
+         
+                </div>
+            </div>
+        </div>
+        
+       
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+      
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('invoice-date').value = today;
+            
+         
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            document.getElementById('order-number').textContent = Math.floor(1000 + Math.random() * 9000);
+            
+            let items = [];
+            
+            const itemsTbody = document.getElementById('items-tbody');
+            const addItemBtn = document.getElementById('add-item-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const notification = document.getElementById('notification');
+            const invoiceList = document.getElementById('invoice-list');
+            
+           
+            function addItem() {
+                const newItem = {
+                    id: Date.now(),
+                    description: '',
+                    quantity: 1,
+                    rate: 0,
+                    amount: 0
+                };
+                items.push(newItem);
+                renderItems();
+            }
+            
+          
+            function renderItems() {
+                itemsTbody.innerHTML = '';
+                
+                items.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>
+                            <input type="text" class="item-desc" data-id="${item.id}" value="${item.description}" placeholder="Item description" required>
+                            <div class="error-message" style="display: none;">Description is required</div>
+                        </td>
+                        <td>
+                            <input type="number" class="item-qty" data-id="${item.id}" value="${item.quantity}" min="1" required>
+                            <div class="error-message" style="display: none;">Quantity must be greater than 0</div>
+                        </td>
+                        <td>
+                            <input type="number" class="item-rate" data-id="${item.id}" value="${item.rate}" min="0" step="0.01" placeholder="0.00" required>
+                            <div class="error-message" style="display: none;">Rate is required</div>
+                        </td>
+                        <td class="item-amount" data-id="${item.id}">₹${item.amount.toFixed(2)}</td>
+                        <td><button class="delete-item-btn" data-id="${item.id}">×</button></td>
+                    `;
+                    itemsTbody.appendChild(tr);
+                });
+                
+                
+                document.querySelectorAll('.item-desc').forEach(input => {
+                    input.addEventListener('input', updateItem);
+                    input.addEventListener('blur', validateField);
+                });
+                
+                document.querySelectorAll('.item-qty').forEach(input => {
+                    input.addEventListener('input', updateItem);
+                    input.addEventListener('blur', validateField);
+                });
+                
+                document.querySelectorAll('.item-rate').forEach(input => {
+                    input.addEventListener('input', updateItem);
+                    input.addEventListener('blur', validateField);
+                });
+                
+                
+                document.querySelectorAll('.delete-item-btn').forEach(button => {
+                    button.addEventListener('click', deleteItem);
+                });
+                
+                calculateTotals();
+            }
+            
+            
+            function updateItem(e) {
+                const id = parseInt(e.target.getAttribute('data-id'));
+                const item = items.find(item => item.id === id);
+                
+                if (e.target.classList.contains('item-desc')) {
+                    item.description = e.target.value;
+                } else if (e.target.classList.contains('item-qty')) {
+                    item.quantity = parseInt(e.target.value) || 0;
+                } else if (e.target.classList.contains('item-rate')) {
+                    item.rate = parseFloat(e.target.value) || 0;
+                }
+                
+                item.amount = item.quantity * item.rate;
+                
+             
+                const amountCell = document.querySelector(`.item-amount[data-id="${id}"]`);
+                if (amountCell) {
+                    amountCell.textContent = `₹${item.amount.toFixed(2)}`;
+                }
+                
+                calculateTotals();
+            }
+            
+            function deleteItem(e) {
+                const id = parseInt(e.target.getAttribute('data-id'));
+                items = items.filter(item => item.id !== id);
+                renderItems();
+            }
+            
+           
+            function calculateTotals() {
+                
+            }
+            
+            
+            function validateField(e) {
+                const field = e.target;
+                const value = field.value.trim();
+                let isValid = true;
+                let errorMessage = '';
+                
+             
+                field.classList.remove('error');
+                
+               
+                if (field.hasAttribute('required') && !value) {
+                    isValid = false;
+                    errorMessage = 'This field is required';
+                }
+                
+              
+                if (isValid) {
+                    if (field.type === 'email') {
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailPattern.test(value)) {
+                            isValid = false;
+                            errorMessage = 'Please enter a valid email address';
+                        }
+                    } else if (field.id === 'company-phone' || field.id === 'client-phone') {
+                       
+                        const digits = value.replace(/\D/g, '');
+                        if (digits.length < 10) {
+                            isValid = false;
+                            errorMessage = 'Please enter a valid phone number';
+                        }
+                    } else if (field.classList.contains('item-qty') && parseInt(value) <= 0) {
+                        isValid = false;
+                        errorMessage = 'Quantity must be greater than 0';
+                    } else if (field.classList.contains('item-rate') && parseFloat(value) < 0) {
+                        isValid = false;
+                        errorMessage = 'Rate cannot be negative';
+                    }
+                }
+                
+                if (!isValid) {
+                    field.classList.add('error');
+                    const errorElement = field.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('error-message')) {
+                        errorElement.textContent = errorMessage;
+                        errorElement.style.display = 'block';
+                    }
+                } else {
+                
+                    const errorElement = field.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('error-message')) {
+                        errorElement.style.display = 'none';
+                    }
+                }
+                
+                return isValid;
+            }
+            
+          
+            function validateForm() {
+                let isValid = true;
+                
+                
+                const allInputs = document.querySelectorAll('input, textarea');
+                allInputs.forEach(input => {
+                    if (!validateField({target: input})) {
+                        isValid = false;
+                    }
+                });
+                
+
+                if (items.length === 0) {
+                    isValid = false;
+                    showNotification('Please add at least one item', true);
+                } else {
+                
+                    for (const item of items) {
+                        if (!item.description || item.quantity <= 0 || item.rate < 0) {
+                            isValid = false;
+                            showNotification('Please check all item fields', true);
+                            break;
+                        }
+                    }
+                }
+                
+                return isValid;
+            }
+            
+ 
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.classList.remove('error');
+                
+                if (isError) {
+                    notification.classList.add('error');
+                }
+                
+                notification.classList.add('show');
+                
+        
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+      
+            function saveToLocalStorage() {
+                const orderNumber = document.getElementById('order-number').textContent;
+                const invoiceData = {
+                    orderNumber: orderNumber,
+                    companyName: document.getElementById('company-name').value,
+                    companyAddress: document.getElementById('company-address').value,
+                    companyPhone: document.getElementById('company-phone').value,
+                    companyEmail: document.getElementById('company-email').value,
+                    clientName: document.getElementById('client-name').value,
+                    clientAddress: document.getElementById('client-address').value,
+                    invoiceDate: document.getElementById('invoice-date').value,
+                    items: items,
+                    createdAt: new Date().toISOString()
+                };
+                
+             
+                const existingInvoices = JSON.parse(localStorage.getItem('shoppingInvoices') || '[]');
+                
+              
+                const existingIndex = existingInvoices.findIndex(inv => inv.orderNumber === orderNumber);
+                
+                if (existingIndex !== -1) {
+                   
+                    existingInvoices[existingIndex] = invoiceData;
+                } else {
+            
+                    existingInvoices.push(invoiceData);
+                }
+                
+
+                localStorage.setItem('shoppingInvoices', JSON.stringify(existingInvoices));
+                
+
+                showNotification('Invoice saved successfully!');
+                
+ 
+                renderInvoiceList();
+            }
+            function loadFromLocalStorage(orderNumber = null) {
+                const savedInvoices = JSON.parse(localStorage.getItem('shoppingInvoices') || '[]');
+                
+                if (orderNumber) {
+                
+                    const invoiceData = savedInvoices.find(inv => inv.orderNumber === orderNumber);
+                    
+                    if (invoiceData) {
+                        document.getElementById('order-number').textContent = invoiceData.orderNumber;
+                        document.getElementById('company-name').value = invoiceData.companyName;
+                        document.getElementById('company-address').value = invoiceData.companyAddress;
+                        document.getElementById('company-phone').value = invoiceData.companyPhone;
+                        document.getElementById('company-email').value = invoiceData.companyEmail;
+                        document.getElementById('client-name').value = invoiceData.clientName;
+                        document.getElementById('client-address').value = invoiceData.clientAddress;
+                        document.getElementById('invoice-date').value = invoiceData.invoiceDate;
+                        
+                        items = invoiceData.items || [];
+                        renderItems();
+                        
+                        showNotification('Invoice loaded successfully!');
+                    }
+                } else {
+          
+                    if (savedInvoices.length > 0) {
+                        const mostRecent = savedInvoices[savedInvoices.length - 1];
+                        loadFromLocalStorage(mostRecent.orderNumber);
+                    }
+                }
+                
+              
+                renderInvoiceList();
+            }
+            
+            
+            function renderInvoiceList() {
+                const savedInvoices = JSON.parse(localStorage.getItem('shoppingInvoices') || '[]');
+                
+                invoiceList.innerHTML = '';
+                
+                if (savedInvoices.length === 0) {
+                    invoiceList.innerHTML = '<p>No saved invoices found.</p>';
+                    return;
+                }
+                
+                savedInvoices.forEach(invoice => {
+                    const invoiceItem = document.createElement('div');
+                    invoiceItem.className = 'invoice-item';
+                    
+                    invoiceItem.innerHTML = `
+                        <div>
+                            <strong>${invoice.orderNumber}</strong> - ${invoice.clientName} (${new Date(invoice.createdAt).toLocaleDateString()})
+                        </div>
+                        <div class="invoice-actions">
+                            <button class="load-btn" data-order="${invoice.orderNumber}">Load</button>
+                            <button class="delete-btn" data-order="${invoice.orderNumber}">Delete</button>
+                        </div>
+                    `;
+                    
+                    invoiceList.appendChild(invoiceItem);
+                });
+                
+         
+                document.querySelectorAll('.load-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const orderNumber = this.getAttribute('data-order');
+                        loadFromLocalStorage(orderNumber);
+                    });
+                });
+                
+
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const orderNumber = this.getAttribute('data-order');
+                        deleteInvoice(orderNumber);
+                    });
+                });
+            }
+            
+       
+            function deleteInvoice(orderNumber) {
+                const savedInvoices = JSON.parse(localStorage.getItem('shoppingInvoices') || '[]');
+                const updatedInvoices = savedInvoices.filter(inv => inv.orderNumber !== orderNumber);
+                
+                localStorage.setItem('shoppingInvoices', JSON.stringify(updatedInvoices));
+                
+               
+                if (document.getElementById('order-number').textContent === orderNumber) {
+                 
+                    document.getElementById('order-number').textContent = Math.floor(1000 + Math.random() * 9000);
+                    
+              
+                    document.getElementById('company-name').value = '';
+                    document.getElementById('company-address').value = '';
+                    document.getElementById('company-phone').value = '';
+                    document.getElementById('company-email').value = '';
+                    document.getElementById('client-name').value = '';
+                    document.getElementById('client-address').value = '';
+       
+                    items = [];
+                    renderItems();
+               
+                    addItem();
+                }
+                
+                showNotification('Invoice deleted successfully!');
+                renderInvoiceList();
+            }
+            
+     
+            addItemBtn.addEventListener('click', addItem);
+            
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    saveToLocalStorage();
+                } else {
+                    showNotification('Please fix all errors before submitting', true);
+                }
+            });
+            
+            
+            const formFields = document.querySelectorAll('input, textarea');
+            formFields.forEach(field => {
+                field.addEventListener('blur', validateField);
+            });
+            
+      
+            loadFromLocalStorage();
+           
+            if (items.length === 0) {
+                addItem();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Receipt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+          
+            background-image: url("photo-1457131760772-7017c6180f05.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+      .receipt-container {
+
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 20px;
+    border: 2px solid beige;
+}
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .receipt-header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .receipt-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .receipt-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .receipt-from, .receipt-to {
+            flex: 1;
+        }
+        
+        .receipt-section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .receipt-info p {
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        
+        .receipt-info strong {
+            color: #2c3e50;
+        }
+        
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 30px;
+        }
+        
+        .receipt-table th {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .receipt-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            color: #34495e;
+        }
+        
+        .receipt-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .receipt-summary {
+            margin-left: auto;
+            width: 300px;
+            border-top: 2px solid #2c3e50;
+            padding-top: 15px;
+        }
+        
+        .receipt-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .receipt-summary-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .receipt-summary-value {
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .receipt-total {
+            font-size: 18px;
+            color: #2c3e50;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .receipt-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .no-invoice {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .no-invoice p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .back-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background: #2980b9;
+        }
+        
+        .print-btn {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+        
+        .print-btn:hover {
+            background: #1a2530;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+      
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div id="receipt-content">
+            <div class="no-invoice" id="no-invoice">
+                <p>No VISION data found in localStorage.</p>
+                <a href="javascript:history.back()" class="back-btn">Go Back</a>
+            </div>
+        </div>
+        
+        <div class="button-container" id="button-container" style="display: none;">
+            <a href="http://127.0.0.1:5500/index%20.html" class="back-btn">Go Back</a>
+        
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          
+            const savedInvoices = JSON.parse(localStorage.getItem('shoppingInvoices') || '[]');
+            
+           
+            const receiptContent = document.getElementById('receipt-content');
+            const noInvoice = document.getElementById('no-invoice');
+            const buttonContainer = document.getElementById('button-container');
+            
+          
+            if (savedInvoices.length > 0) {
+                
+                const invoice = savedInvoices[savedInvoices.length - 1];
+                
+                
+                noInvoice.style.display = 'none';
+                
+               
+                let subtotal = 0;
+                invoice.items.forEach(item => {
+                    subtotal += item.quantity * item.rate;
+                });
+                
+                const taxRate = 0.18; 
+                const tax = subtotal * taxRate;
+                const total = subtotal + tax;
+                
+               
+                receiptContent.innerHTML = `
+                    <div class="receipt-header">
+                        <h1>VISION RECEIPT</h1>
+                        <p>Order #${invoice.orderNumber} | Date: ${new Date(invoice.invoiceDate).toLocaleDateString()}</p>
+                    </div>
+                    
+                    <div class="receipt-details">
+                        <div class="receipt-from">
+                            <h3 class="receipt-section-title">From:</h3>
+                            <div class="receipt-info">
+                                <p><strong>${invoice.companyName}</strong></p>
+                                <p>${invoice.companyAddress}</p>
+                                <p>${invoice.companyPhone}</p>
+                                <p>${invoice.companyEmail}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-to">
+                            <h3 class="receipt-section-title">Bill To:</h3>
+                            <div class="receipt-info">
+                                <p><strong>${invoice.clientName}</strong></p>
+                                <p>${invoice.clientAddress}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="receipt-section-title">Order Details</h3>
+                    <table class="receipt-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Rate (₹)</th>
+                                <th class="text-right">Amount (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${invoice.items.map(item => `
+                                <tr>
+                                    <td>${item.description}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.rate.toFixed(2)}</td>
+                                    <td class="text-right">${(item.quantity * item.rate).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="receipt-summary">
+                        <div class="receipt-summary-row">
+                            <span class="receipt-summary-label">Subtotal:</span>
+                            <span class="receipt-summary-value">₹${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="receipt-summary-row">
+                            <span class="receipt-summary-label">Tax (18%):</span>
+                            <span class="receipt-summary-value">₹${tax.toFixed(2)}</span>
+                        </div>
+                        <div class="receipt-summary-row receipt-total">
+                            <span class="receipt-summary-label">Total:</span>
+                            <span class="receipt-summary-value">₹${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    
+                `;
+                
+                
+                buttonContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
